@@ -61,7 +61,7 @@ export function logout(): void {
 // Get current user
 export async function getCurrentUser(): Promise<User> {
   try {
-    const response = await fetchWithTokenRefresh(`https://mmg-support-api-7wrlg.ondigitalocean.app/auth/me`);
+    const response = await fetchWithTokenRefresh(`https://mmg-support-api7wrlg.ondigitalocean.app/auth/me`);
     if (!response.ok) {
       throw new Error('Error al obtener el usuario actual');
     }
