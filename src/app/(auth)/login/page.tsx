@@ -33,10 +33,13 @@ export default function LoginPage() {
 
   useEffect(() => {
     const checkToken = async () => {
-      const token = await getAuthToken();
-      if (token) {
-        // Si el token es válido, redirige a la ruta /users
-        router.push('/users');
+      try {
+        const token = await getAuthToken();
+        if (token) {
+          router.push('/users');
+        }
+      } catch (error) {
+        // Silently fail if no token exists - user is on login page anyway
       }
     };
 

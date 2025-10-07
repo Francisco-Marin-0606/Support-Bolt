@@ -270,19 +270,23 @@ export function clearTokens(): void {
 
 export async function getAuthToken(): Promise<string | null> {
   try {
-    const { accessToken, isExpired } = getTokens();
-    
+    const { accessToken, refreshToken, isExpired } = getTokens();
+
     if (!accessToken) {
       return null;
     }
-    
+
     if (isExpired) {
+      if (!refreshToken) {
+        clearTokens();
+        return null;
+      }
       return await getValidToken();
     }
-    
+
     return accessToken;
   } catch (error) {
-    console.error('Error getting auth token:', error);
+    clearTokens();
     return null;
   }
 }
