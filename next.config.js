@@ -5,7 +5,7 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: `${apiUrl}/:path*`,
+        destination: `https://mmg-support-api-7wrlg.ondigitalocean.app/:path*`,
       },
     ];
   },
