@@ -12,7 +12,7 @@
     "build": "next build",
     "build:test": "cross-env NODE_ENV=test next build",
     "build:prod": "cross-env NODE_ENV=production next build",
-    "start": "next start",
+    "start": "npm run dev",
     "start:test": "cross-env NODE_ENV=test next start",
     "start:prod": "cross-env NODE_ENV=production next start",
     "lint": "next lint",
