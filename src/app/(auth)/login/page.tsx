@@ -32,11 +32,19 @@ export default function LoginPage() {
   const router = useRouter();
 
   useEffect(() => {
+    // Solo ejecutar en el cliente
+    if (typeof window === 'undefined') return;
+
     const checkToken = async () => {
-      const token = await getAuthToken();
-      if (token) {
-        // Si el token es válido, redirige a la ruta /users
-        router.push('/users');
+      try {
+        const token = await getAuthToken();
+        if (token) {
+          // Si el token es válido, redirige a la ruta /users
+          router.push('/users');
+        }
+      } catch (error) {
+        // Si hay error al obtener el token, no hacemos nada (usuario no autenticado)
+        console.log('No authenticated user');
       }
     };
 
