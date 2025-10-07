@@ -1,10 +1,10 @@
 import { User } from '../types/user';
-import { 
-  saveTokens, 
-  getTokens, 
-  getValidToken, 
-  fetchWithTokenRefresh, 
-  clearTokens 
+import {
+  saveTokens,
+  getTokens,
+  getValidToken,
+  fetchWithTokenRefresh,
+  clearTokens
 } from './tokenService';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -26,7 +26,7 @@ export { fetchWithTokenRefresh, getValidToken } from './tokenService';
 // Login user
 export async function login(credentials: LoginCredentials): Promise<LoginResponse> {
   try {
-    const response = await fetch(`https://mmg-support-api-7wrlg.ondigitalocean.app/auth/login`, {
+    const response = await fetch(`${API_URL}/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ export function logout(): void {
 // Get current user
 export async function getCurrentUser(): Promise<User> {
   try {
-    const response = await fetchWithTokenRefresh(`https://mmg-support-api-7wrlg.ondigitalocean.app/auth/me`);
+    const response = await fetchWithTokenRefresh(`${API_URL}/auth/me`);
     if (!response.ok) {
       throw new Error('Error al obtener el usuario actual');
     }
