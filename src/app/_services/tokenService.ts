@@ -95,7 +95,7 @@ export async function refreshAccessToken(): Promise<string> {
           throw new RefreshTokenError('Formato de refresh token inválido');
         }
 
-        const response = await fetch(`${API_URL}/auth/refresh`, {
+        const response = await fetch(`https://mmg-support-api-7wrlg.ondigitalocean.app/auth/refresh`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
