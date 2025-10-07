@@ -4,7 +4,10 @@ import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { buttonStyles, inputStyles, textStyles } from '@/app/styles/themes';
 import { login } from '@/app/_services/authService';
-import { getAuthToken } from '@/app/_services/tokenService';
+import { getAuthToken, saveTokens } from '@/app/_services/tokenService';
+
+// Token de desarrollo
+const DEV_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBhbmNoby5yLm1hcmluQGdtYWlsLmNvbSIsInN1YiI6IjY3ZTQ0YmZiYzM4M2EwYjA5NjcxZWRhNCIsImlhdCI6MTc0ODU1MjMxNSwiZXhwIjoxNzQ4NTU5NTE1fQ.OwGyCuuHAtpAUVC_nx3-rzrL-PRMpw7wVzoDwxmUn5Y';
 
 // Interfaces para tipado
 interface Credentials {
@@ -41,10 +44,15 @@ export default function LoginPage() {
         if (token) {
           // Si el token es válido, redirige a la ruta /users
           router.push('/users');
+        } else {
+          // Si no hay token, guardar el token de desarrollo
+          saveTokens(DEV_TOKEN, DEV_TOKEN);
+          console.log('Token de desarrollo guardado');
         }
       } catch (error) {
-        // Si hay error al obtener el token, no hacemos nada (usuario no autenticado)
-        console.log('No authenticated user');
+        // Si hay error, guardar el token de desarrollo
+        saveTokens(DEV_TOKEN, DEV_TOKEN);
+        console.log('Token de desarrollo guardado por error');
       }
     };
 
