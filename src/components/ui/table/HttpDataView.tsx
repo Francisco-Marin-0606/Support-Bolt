@@ -152,23 +152,22 @@ const DataView = <T extends Record<string, unknown>>({
   return (
     <div className="space-y-4">
       {/* Contenedor principal con sombra y bordes redondeados */}
-      <div className="bg-white shadow ring-1 ring-black ring-opacity-5 rounded-lg">
-        {/* Barra superior con búsqueda */}
+      <div className="bg-card border border-border rounded-lg overflow-hidden">
         {/* Contenedor de la tabla con scroll horizontal */}
         <div className="relative overflow-x-auto">
           {isLoading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm z-10">
+            <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm z-10">
               <Loading text={loadingText} />
             </div>
           )}
           <div className="inline-block min-w-full align-middle">
-            <Table className="min-w-full divide-y divide-gray-300">
+            <Table className="min-w-full">
               <TableHeader>
-                <TableRow className="bg-gray-50">
+                <TableRow className="border-b border-border">
                   {columns.map((column) => (
                     <TableHead
                       key={column.field as string}
-                      className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 cursor-pointer hover:bg-gray-100"
+                      className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-foreground sm:pl-6 cursor-pointer hover:bg-accent/50 transition-colors"
                       onClick={() => !isLoading && handleSort(column.field)}
                     >
                       <div className="group inline-flex items-center gap-x-3">
@@ -180,31 +179,31 @@ const DataView = <T extends Record<string, unknown>>({
                                 ? "ArrowUp"
                                 : "ArrowDown"
                             }
-                            className="text-gray-400"
+                            className="text-muted-foreground"
                           />
                         ) : (
                           <Icon
                             name="ArrowUp"
-                            className="invisible group-hover:visible text-gray-400"
+                            className="invisible group-hover:visible text-muted-foreground"
                           />
                         )}
                       </div>
                     </TableHead>
                   ))}
                   {actions.length > 0 && (
-                    <TableHead className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                    <TableHead className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-foreground sm:pl-6">
                       Acciones
                     </TableHead>
                   )}
                 </TableRow>
               </TableHeader>
-              <TableBody className="divide-y divide-gray-200 bg-white">
+              <TableBody className="divide-y divide-border">
                 {processedData.map((item, index) => (
-                  <TableRow key={index} className="hover:bg-gray-50">
+                  <TableRow key={index} className="hover:bg-accent/50 transition-colors">
                     {columns.map((column) => (
                       <TableCell
                         key={column.field as string}
-                        className="py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6"
+                        className="py-4 pl-4 pr-3 text-sm text-foreground sm:pl-6"
                       >
                         {renderCell(column, item)}
                       </TableCell>
@@ -218,10 +217,10 @@ const DataView = <T extends Record<string, unknown>>({
                               <button
                                 key={actionIndex}
                                 onClick={() => action.action(item)}
-                                className="text-blue-600 hover:text-blue-900"
+                                className="p-2 rounded-md text-blue-400 hover:text-blue-300 hover:bg-accent transition-colors"
                                 title={action.tooltip || action.label}
                               >
-                                <Icon name={action.icon} className="mr-1" />
+                                <Icon name={action.icon} />
                                 <span className="sr-only">{action.label}</span>
                               </button>
                             ))}
