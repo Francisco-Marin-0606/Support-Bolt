@@ -7,14 +7,29 @@ export const useAudioStats = () => {
   return useQuery({
     queryKey: ['audioStats'],
     queryFn: async (): Promise<AudioRequestStats> => {
-      const response = await getAudioRequestStats();
-      return response;
+      try {
+        const response = await getAudioRequestStats();
+        return response;
+      } catch (error) {
+        console.error('Error en useAudioStats:', error);
+        return {
+          totalRequests: 0,
+          byStatus: {
+            pending: 0,
+            created: 0,
+            sended: 0,
+            completed: 0,
+            error: 0,
+            review: 0
+          }
+        };
+      }
     },
-    staleTime: Infinity, // Nunca considerar la data como stale automáticamente
-    gcTime: Infinity, // Nunca eliminar del cache automáticamente
+    staleTime: Infinity,
+    gcTime: Infinity,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    refetchOnMount: false, // Solo refetch manual
+    refetchOnMount: false,
     retry: 2,
   });
 }; 

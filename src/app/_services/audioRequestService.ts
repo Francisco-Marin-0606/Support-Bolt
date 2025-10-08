@@ -331,12 +331,21 @@ export async function acceleratePublication(
 }
 
 export async function getAudioRequestStats(): Promise<AudioRequestStats> {
-  const response = await connection.get<AudioRequestStats>(`${MMG_API}/totals`);
-  if (!response.ok) {
-    throw new Error(
-      "Error al obtener las estadísticas de las solicitudes de audio"
-    );
+  try {
+    const response = await connection.get<AudioRequestStats>(`${MMG_API}/totals`);
+    if (!response.ok) {
+      console.error('Error response:', {
+        status: response.status,
+        data: response.data
+      });
+      throw new Error(
+        `Error al obtener las estadísticas de las solicitudes de audio: ${response.status}`
+      );
+    }
+    return response.data;
+  } catch (error) {
+    console.error('Error en getAudioRequestStats:', error);
+    throw error;
   }
-  return response.data;
 }
 
