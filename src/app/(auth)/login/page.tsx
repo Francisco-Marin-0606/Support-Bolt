@@ -104,7 +104,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background-secondary">
-      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-sm">
+      <div className="max-w-md w-full space-y-8 p-8 bg-card rounded-lg shadow-sm">
         <div>
           <h2 className={`${textStyles.h2} text-center`}>Mental Support</h2>
           <p className={`${textStyles.body} text-center text-text-secondary mt-2`}>

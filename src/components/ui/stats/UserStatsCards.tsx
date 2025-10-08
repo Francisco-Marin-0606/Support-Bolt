@@ -11,11 +11,11 @@ interface StatCardProps {
 const StatCard: React.FC<StatCardProps> = ({
   title,
   value,
-  valueColor = "text-black",
+  valueColor = "text-foreground",
 }) => {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-strong">
-      <h3 className={`${textStyles.body} text-gray-500 mb-1`}>{title}</h3>
+    <div className="bg-card p-6 rounded-lg shadow-strong">
+      <h3 className={`${textStyles.body} text-muted-foreground mb-1`}>{title}</h3>
       <p className={`${textStyles.display3} ${valueColor}`}>{value}</p>
     </div>
   );
@@ -48,7 +48,7 @@ const UserStatsCards: React.FC<UserStatsCardsProps> = ({
       <StatCard
         title="Cancelados"
         value={formatNumber(canceledUsers)}
-        valueColor="text-gray-500"
+        valueColor="text-muted-foreground"
       />
     </div>
   );

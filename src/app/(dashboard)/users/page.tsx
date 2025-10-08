@@ -1123,7 +1123,7 @@ function UsersContent() {
           <div className="grid grid-cols-3 gap-4">
             <div
               onClick={showAllUsers}
-              className={`bg-white rounded-lg p-6 shadow-strong cursor-pointer transition-all duration-200 ${
+              className={`bg-card rounded-lg p-6 shadow-strong cursor-pointer transition-all duration-200 ${
                 memberStatus === "all"
                   ? "ring-2 ring-blue-500"
                   : "hover:shadow-xl"
@@ -1140,7 +1140,7 @@ function UsersContent() {
 
             <div
               onClick={showActiveUsers}
-              className={`bg-white rounded-lg p-6 shadow-strong cursor-pointer transition-all duration-200 ${
+              className={`bg-card rounded-lg p-6 shadow-strong cursor-pointer transition-all duration-200 ${
                 memberStatus === "active"
                   ? "ring-2 ring-green-500"
                   : "hover:shadow-xl"
@@ -1163,7 +1163,7 @@ function UsersContent() {
 
             <div
               onClick={showTrialUsers}
-              className={`bg-white rounded-lg p-6 shadow-strong cursor-pointer transition-all duration-200 ${
+              className={`bg-card rounded-lg p-6 shadow-strong cursor-pointer transition-all duration-200 ${
                 memberStatus === "trial"
                   ? "ring-2 ring-orange-500"
                   : "hover:shadow-xl"
@@ -1283,7 +1283,7 @@ function UsersContent() {
       </div>
       {showCancelModal && (
         <Modal onClose={() => setShowCancelModal(false)}>
-          <div className="w-[500px] bg-white rounded-lg p-6">
+          <div className="w-[500px] bg-card rounded-lg p-6">
             <h2 className="text-xl font-bold mb-4">Cancelar Suscripción</h2>
             <p>
               ¿Estás seguro de que quieres cancelar la suscripción de{" "}

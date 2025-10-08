@@ -290,20 +290,20 @@ const GridDataView = <T extends Record<string, unknown>>({
   return (
     <div className="space-y-4">
       {/* Contenedor principal con sombra y bordes redondeados */}
-      <div className="bg-white shadow-sm ring-black ring-opacity-5 rounded-[30px]">
+      <div className="bg-card shadow-sm ring-border ring-1 rounded-[30px]">
         {/* Barra superior con búsqueda */}
         {showSearch && (
-          <div className="py-3 border-b border-gray-100">
+          <div className="py-3 border-b border-border">
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-4 m-4 flex-1">
                 <div className="flex items-center max-w-md">
-                  <div className="relative w-full text-gray-400 focus-within:text-gray-600">
+                  <div className="relative w-full text-muted-foreground focus-within:text-foreground">
                     <Input
                       id="search"
                       placeholder="Buscar..."
                       value={searchTerm}
                       onChange={handleSearchInputChange}
-                      className="block w-full rounded-[60px] border-0 py-1.5 pl-10 ring-2 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-lg sm:leading-4"
+                      className="block w-full rounded-[60px] border-0 py-1.5 pl-10 ring-2 ring-inset ring-input placeholder:text-muted-foreground focus:ring-2 focus:ring-inset focus:ring-ring sm:text-lg sm:leading-4 bg-background text-foreground"
                     />
                   </div>
                 </div>
@@ -331,27 +331,27 @@ const GridDataView = <T extends Record<string, unknown>>({
         {/* Contenedor de la tabla con scroll horizontal */}
         <div className="relative overflow-x-auto py-4 px-4">
           <div className="inline-block min-w-full align-middle">
-            <Table className="min-w-full divide-y divide-gray-100">
+            <Table className="min-w-full divide-y divide-border">
               <TableHeader>
-                <TableRow key="header" className="bg-white">
+                <TableRow key="header" className="bg-card">
                   {columns.map((column) => (
                     <TableHead
                       key={column.field as string}
-                      className="py-3.5 pl-4 pr-3 text-center text-sm font-semibold text-gray-900 sm:pl-6 cursor-pointer hover:bg-gray-50"
+                      className="py-3.5 pl-4 pr-3 text-center text-sm font-semibold text-foreground sm:pl-6 cursor-pointer hover:bg-muted"
                       onClick={() => handleSort(column.field)}
                     >
                       <div className="flex items-center justify-center gap-2">
                         <span
                           className={`${
                             sortConfig.key === column.field
-                              ? "text-gray-900 font-bold"
-                              : "text-gray-400 font-normal"
+                              ? "text-foreground font-bold"
+                              : "text-muted-foreground font-normal"
                           }`}
                         >
                           {column.header}
                         </span>
                         {sortConfig.key === column.field && (
-                          <span className="font-bold text-[16px] text-gray-900">
+                          <span className="font-bold text-[16px] text-foreground">
                             {sortConfig.direction === "asc" ? (
                               <ChevronUp />
                             ) : (
@@ -363,13 +363,13 @@ const GridDataView = <T extends Record<string, unknown>>({
                     </TableHead>
                   ))}
                   {actions.length > 0 && (
-                    <TableHead className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                    <TableHead className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-foreground sm:pl-6">
                       Acciones
                     </TableHead>
                   )}
                 </TableRow>
               </TableHeader>
-              <TableBody className="divide-y divide-gray-100 bg-white">
+              <TableBody className="divide-y divide-border bg-card">
                 {isLoading
                   ? // Skeleton rows solo cuando está cargando
                     Array.from({ length: limit || 20 }).map((_, index) => (
@@ -380,13 +380,13 @@ const GridDataView = <T extends Record<string, unknown>>({
                         {columns.map((column, colIndex) => (
                           <TableCell
                             key={`skeleton-cell-${colIndex}`}
-                            className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6 text-center"
+                            className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-foreground sm:pl-6 text-center"
                           >
                             <Skeleton className="h-4 w-[80%] mx-auto" />
                           </TableCell>
                         ))}
                         {actions.length > 0 && (
-                          <TableCell className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6">
+                          <TableCell className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-foreground sm:pl-6">
                             <div className="flex gap-2">
                               <Skeleton className="h-8 w-8 rounded-md" />
                               <Skeleton className="h-8 w-8 rounded-md" />
@@ -414,7 +414,7 @@ const GridDataView = <T extends Record<string, unknown>>({
                     processedData.map((item, index) => (
                       <TableRow
                         key={`row-${index}-${item.id || index}`}
-                        className={`hover:bg-gray-150 ${
+                        className={`hover:bg-muted/50 ${
                           onRowClick ? "cursor-pointer" : ""
                         }`}
                         onClick={() => onRowClick && onRowClick(item)}
@@ -430,7 +430,7 @@ const GridDataView = <T extends Record<string, unknown>>({
                         {columns.map((column) => (
                           <TableCell
                             key={column.field as string}
-                            className="py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6 text-center"
+                            className="py-4 pl-4 pr-3 text-sm text-foreground sm:pl-6 text-center"
                           >
                             {renderCell(column, item)}
                           </TableCell>
