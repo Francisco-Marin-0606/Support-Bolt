@@ -25,17 +25,17 @@ const Loading: React.FC<LoadingProps> = ({
     lg: 'text-lg'
   };
 
-  const containerClasses = fullScreen 
-    ? 'fixed inset-0 bg-white/80 backdrop-blur-sm z-50' 
+  const containerClasses = fullScreen
+    ? 'fixed inset-0 bg-background/80 backdrop-blur-sm z-50'
     : 'w-full';
 
   return (
     <div className={`${containerClasses} flex flex-col items-center justify-center min-h-[100px]`}>
-      <Loader2 
-        className={`${sizeClasses[size]} animate-spin text-primary`} 
+      <Loader2
+        className={`${sizeClasses[size]} animate-spin text-primary`}
       />
       {text && (
-        <p className={`${textSizeClasses[size]} text-gray-600 mt-2`}>
+        <p className={`${textSizeClasses[size]} text-muted-foreground mt-2`}>
           {text}
         </p>
       )}
