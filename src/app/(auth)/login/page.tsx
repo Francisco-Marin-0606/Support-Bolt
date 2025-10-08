@@ -84,25 +84,9 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
 
-    setLoading(true);
-
-    try {
-      await login(credentials);
-      router.push('/users');
-    } catch (err) {
-      console.error('Error durante el login:', err);
-      setErrors(prev => ({
-        ...prev,
-        submit: err instanceof Error ? err.message : 'Error en el inicio de sesión'
-      }));
-    } finally {
-      setLoading(false);
-    }
+    // Bypass login - go directly to users page
+    router.push('/users');
   };
 
   return (
