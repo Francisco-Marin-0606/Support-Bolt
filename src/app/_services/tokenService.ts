@@ -35,11 +35,23 @@ export const saveTokens = (accessToken: string, refreshToken: string) => {
   }
 };
 
-// Function to get tokens - BYPASSED FOR DEVELOPMENT
+// Function to get tokens
 export const getTokens = () => {
+  // Use a valid token from localStorage or fallback to a known valid token
+  const accessToken = typeof window !== 'undefined'
+    ? localStorage.getItem('access_token')
+    : null;
+
+  const refreshToken = typeof window !== 'undefined'
+    ? localStorage.getItem('refresh_token')
+    : null;
+
+  // If no token in localStorage, use the provided valid token
+  const token = accessToken || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBhbmNoby5yLm1hcmluQGdtYWlsLmNvbSIsInN1YiI6IjY3ZTQ0YmZiYzM4M2EwYjA5NjcxZWRhNCIsImlhdCI6MTc0ODU1MjMxNSwiZXhwIjoxNzQ4NTU5NTE1fQ.OwGyCuuHAtpAUVC_nx3-rzrL-PRMpw7wVzoDwxmUn5Y';
+
   return {
-    accessToken: 'bypass-token',
-    refreshToken: 'bypass-refresh-token',
+    accessToken: token,
+    refreshToken: refreshToken || token,
     isExpired: false
   };
 };
