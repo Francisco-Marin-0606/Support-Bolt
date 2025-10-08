@@ -35,25 +35,25 @@ export const ConfirmModal = ({
 
   return (
     <Modal onClose={onClose}>
-      <div className="bg-card border border-border rounded-lg p-6 max-w-md w-full mx-4">
-        <h3 className="text-lg font-semibold text-foreground mb-4">{title}</h3>
-        <p className="text-muted-foreground mb-6">{message}</p>
-
+      <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">{title}</h3>
+        <p className="text-gray-600 mb-6">{message}</p>
+        
         <div className="flex justify-end gap-3">
           <button
             onClick={onClose}
             disabled={loading}
-            className="px-4 py-2 text-muted-foreground border border-border rounded-lg hover:bg-accent transition-colors disabled:opacity-50"
+            className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
           >
             {cancelText}
           </button>
           <button
             onClick={onConfirm}
             disabled={loading}
-            className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-colors disabled:opacity-50 flex items-center gap-2"
+            className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center gap-2"
           >
             {loading && (
-              <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
             )}
             {confirmText}
           </button>

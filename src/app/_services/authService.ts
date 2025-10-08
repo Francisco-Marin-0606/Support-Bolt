@@ -1,11 +1,10 @@
-import axios, { AxiosError } from 'axios';
 import { User } from '../types/user';
-import {
-  saveTokens,
-  getTokens,
-  getValidToken,
-  fetchWithTokenRefresh,
-  clearTokens
+import { 
+  saveTokens, 
+  getTokens, 
+  getValidToken, 
+  fetchWithTokenRefresh, 
+  clearTokens 
 } from './tokenService';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -27,23 +26,25 @@ export { fetchWithTokenRefresh, getValidToken } from './tokenService';
 // Login user
 export async function login(credentials: LoginCredentials): Promise<LoginResponse> {
   try {
-    const response = await axios.post<LoginResponse>(`${API_URL}/auth/login`, credentials, {
+    const response = await fetch(`${API_URL}/auth/login`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
-      }
+      },
+      body: JSON.stringify(credentials),
     });
 
-    saveTokens(response.data.access_token, response.data.refresh_token);
-    return response.data;
-  } catch (error) {
-    console.error('Error in login:', error);
-
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError<{ message?: string }>;
-      throw new Error(axiosError.response?.data?.message || 'Error al iniciar sesión');
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Error al iniciar sesión');
     }
 
+    const data = await response.json();
+    saveTokens(data.access_token, data.refresh_token);
+    return data;
+  } catch (error) {
+    console.error('Error in login:', error);
     throw error;
   }
 }

@@ -37,22 +37,20 @@ export const saveTokens = (accessToken: string, refreshToken: string) => {
 
 // Function to get tokens
 export const getTokens = () => {
-  // Use a valid token from localStorage or fallback to a known valid token
-  const accessToken = typeof window !== 'undefined'
-    ? localStorage.getItem('access_token')
-    : null;
-
-  const refreshToken = typeof window !== 'undefined'
-    ? localStorage.getItem('refresh_token')
-    : null;
-
-  // If no token in localStorage, use the provided valid token
-  const token = accessToken || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBhbmNoby5yLm1hcmluQGdtYWlsLmNvbSIsInN1YiI6IjY3ZTQ0YmZiYzM4M2EwYjA5NjcxZWRhNCIsImlhdCI6MTc0ODU1MjMxNSwiZXhwIjoxNzQ4NTU5NTE1fQ.OwGyCuuHAtpAUVC_nx3-rzrL-PRMpw7wVzoDwxmUn5Y';
-
+  const accessToken = localStorage.getItem('access_token');
+  const refreshToken = localStorage.getItem('refresh_token');
+  const expiresAtStr = localStorage.getItem('token_expires_at');
+  
+  let isExpired = false;
+  if (expiresAtStr) {
+    const expiresAt = new Date(expiresAtStr);
+    isExpired = new Date() > expiresAt;
+  }
+  
   return {
-    accessToken: token,
-    refreshToken: refreshToken || token,
-    isExpired: false
+    accessToken,
+    refreshToken,
+    isExpired
   };
 };
 
@@ -164,22 +162,96 @@ let refreshTokenPromise: Promise<string> | null = null;
 let pendingRequests: Array<() => void> = [];
 
 export async function fetchWithTokenRefresh(url: string, options: RequestInit = {}): Promise<Response> {
-  // Bypass authentication - make requests without token validation
-  const { accessToken } = getTokens();
+  let retryCount = 0;
+  const MAX_RETRIES = 2; 
 
-  return fetch(url, {
-    ...options,
-    headers: {
-      ...options.headers,
-      'Authorization': `Bearer ${accessToken}`,
-    },
-  });
+  async function attemptFetch(): Promise<Response> {
+    try {
+      const { accessToken, isExpired } = getTokens();
+      
+      if (!accessToken) {
+        window.location.href = '/login'; 
+        throw new Error('No hay token de acceso disponible');
+      }
+
+      let tokenToUse = accessToken;
+      if (isExpired) {
+        try {
+          tokenToUse = await getValidToken();
+        } catch (refreshError) {
+          console.error('Error pre-refreshing expired token:', refreshError);
+        }
+      }
+
+      // Intento con el token actual o refrescado
+      const response = await fetch(url, {
+        ...options,
+        headers: {
+          ...options.headers,
+          'Authorization': `Bearer ${tokenToUse}`,
+        },
+      });
+
+      // Si la respuesta es 401 y no hemos excedido los intentos, intentamos refrescar el token
+      if (response.status === 401 && retryCount < MAX_RETRIES) {
+        retryCount++;
+        try {
+          const newAccessToken = await getValidToken();
+          
+          // Reintentamos la petición con el nuevo token
+          return fetch(url, {
+            ...options,
+            headers: {
+              ...options.headers,
+              'Authorization': `Bearer ${newAccessToken}`,
+            },
+          });
+        } catch (refreshError) {
+          console.error('Error refreshing token during fetch:', refreshError);
+          // Si falla el refresh, devolvemos la respuesta 401 original
+          return response;
+        }
+      }
+
+      return response;
+    } catch (error) {
+      console.error('Error in fetchWithTokenRefresh:', error);
+      throw error;
+    }
+  }
+
+  return attemptFetch();
 }
 
 export async function getValidToken(): Promise<string> {
-  // Bypass - always return a fake token
-  const { accessToken } = getTokens();
-  return accessToken;
+  if (refreshTokenPromise) {
+    return refreshTokenPromise;
+  }
+
+  const { accessToken, refreshToken, isExpired } = getTokens();
+  
+  if (accessToken && !isExpired) {
+    return accessToken;
+  }
+
+  if (!refreshToken) {
+    throw new Error('No hay refresh token disponible');
+  }
+
+  refreshTokenPromise = new Promise(async (resolve, reject) => {
+    try {
+      const newToken = await refreshAccessToken();
+      resolve(newToken);
+      pendingRequests.forEach(callback => callback());
+    } catch (error) {
+      reject(error);
+    } finally {
+      refreshTokenPromise = null;
+      pendingRequests = [];
+    }
+  });
+
+  return refreshTokenPromise;
 }
 
 export function clearTokens(): void {
@@ -198,23 +270,19 @@ export function clearTokens(): void {
 
 export async function getAuthToken(): Promise<string | null> {
   try {
-    const { accessToken, refreshToken, isExpired } = getTokens();
-
+    const { accessToken, isExpired } = getTokens();
+    
     if (!accessToken) {
       return null;
     }
-
+    
     if (isExpired) {
-      if (!refreshToken) {
-        clearTokens();
-        return null;
-      }
       return await getValidToken();
     }
-
+    
     return accessToken;
   } catch (error) {
-    clearTokens();
+    console.error('Error getting auth token:', error);
     return null;
   }
 }

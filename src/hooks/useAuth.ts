@@ -9,25 +9,45 @@ import { User } from "@/app/types/user";
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    // Bypass authentication - always consider user as logged in
-    setUser({} as User);
-    setIsLoggedIn(true);
-    setLoading(false);
+    const loadUser = async () => {
+      try {
+        if (isAuthenticated()) {
+          const userData = await getCurrentUser();
+          setUser(userData);
+          setIsLoggedIn(true);
+        } else {
+          setUser(null);
+          setIsLoggedIn(false);
+        }
+      } catch (error) {
+        console.error("Error loading user:", error);
+        setUser(null);
+        setIsLoggedIn(false);
+        // Opcional: limpiar tokens corruptos
+        logout();
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUser();
   }, []);
 
   const handleLogout = () => {
-    // Do nothing on logout bypass
+    logout();
+    setUser(null);
+    setIsLoggedIn(false);
   };
 
   return {
     user,
     loading,
     isLoggedIn,
-    userId: null,
+    userId: user?.id || null,
     logout: handleLogout,
   };
 }

@@ -49,7 +49,6 @@ export class Connection {
    */
   constructor(baseUrl: string = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000') {
     this.baseUrl = baseUrl;
-    console.log('Connection initialized with baseUrl:', this.baseUrl);
   }
 
   /**
@@ -62,17 +61,15 @@ export class Connection {
     // Make sure the endpoint starts with /
     const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
     const url = new URL(`${this.baseUrl}${normalizedEndpoint}`);
-
+    
     // Add query parameters if they exist
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
         url.searchParams.append(key, String(value));
       });
     }
-
-    const fullUrl = url.toString();
-    console.log('Building URL:', { endpoint, normalizedEndpoint, baseUrl: this.baseUrl, fullUrl });
-    return fullUrl;
+    
+    return url.toString();
   }
 
   /**

@@ -290,20 +290,20 @@ const GridDataView = <T extends Record<string, unknown>>({
   return (
     <div className="space-y-4">
       {/* Contenedor principal con sombra y bordes redondeados */}
-      <div className="bg-card border border-border shadow-sm rounded-[30px] overflow-hidden">
+      <div className="bg-white shadow-sm ring-black ring-opacity-5 rounded-[30px]">
         {/* Barra superior con búsqueda */}
         {showSearch && (
-          <div className="py-3 border-b border-border">
+          <div className="py-3 border-b border-gray-100">
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-4 m-4 flex-1">
                 <div className="flex items-center max-w-md">
-                  <div className="relative w-full text-muted-foreground focus-within:text-foreground">
+                  <div className="relative w-full text-gray-400 focus-within:text-gray-600">
                     <Input
                       id="search"
                       placeholder="Buscar..."
                       value={searchTerm}
                       onChange={handleSearchInputChange}
-                      className="block w-full rounded-[60px] border-0 py-1.5 pl-10 ring-2 ring-inset ring-border placeholder:text-muted-foreground focus:ring-2 focus:ring-inset focus:ring-primary bg-background text-foreground sm:text-lg sm:leading-4"
+                      className="block w-full rounded-[60px] border-0 py-1.5 pl-10 ring-2 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-lg sm:leading-4"
                     />
                   </div>
                 </div>
@@ -331,27 +331,27 @@ const GridDataView = <T extends Record<string, unknown>>({
         {/* Contenedor de la tabla con scroll horizontal */}
         <div className="relative overflow-x-auto py-4 px-4">
           <div className="inline-block min-w-full align-middle">
-            <Table className="min-w-full divide-y divide-border">
+            <Table className="min-w-full divide-y divide-gray-100">
               <TableHeader>
-                <TableRow key="header" className="bg-card">
+                <TableRow key="header" className="bg-white">
                   {columns.map((column) => (
                     <TableHead
                       key={column.field as string}
-                      className="py-3.5 pl-4 pr-3 text-center text-sm font-semibold text-foreground sm:pl-6 cursor-pointer hover:bg-accent/50 transition-colors"
+                      className="py-3.5 pl-4 pr-3 text-center text-sm font-semibold text-gray-900 sm:pl-6 cursor-pointer hover:bg-gray-50"
                       onClick={() => handleSort(column.field)}
                     >
                       <div className="flex items-center justify-center gap-2">
                         <span
                           className={`${
                             sortConfig.key === column.field
-                              ? "text-foreground font-bold"
-                              : "text-muted-foreground font-normal"
+                              ? "text-gray-900 font-bold"
+                              : "text-gray-400 font-normal"
                           }`}
                         >
                           {column.header}
                         </span>
                         {sortConfig.key === column.field && (
-                          <span className="font-bold text-[16px] text-foreground">
+                          <span className="font-bold text-[16px] text-gray-900">
                             {sortConfig.direction === "asc" ? (
                               <ChevronUp />
                             ) : (
@@ -363,13 +363,13 @@ const GridDataView = <T extends Record<string, unknown>>({
                     </TableHead>
                   ))}
                   {actions.length > 0 && (
-                    <TableHead className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-foreground sm:pl-6">
+                    <TableHead className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
                       Acciones
                     </TableHead>
                   )}
                 </TableRow>
               </TableHeader>
-              <TableBody className="divide-y divide-border bg-card">
+              <TableBody className="divide-y divide-gray-100 bg-white">
                 {isLoading
                   ? // Skeleton rows solo cuando está cargando
                     Array.from({ length: limit || 20 }).map((_, index) => (
@@ -380,13 +380,13 @@ const GridDataView = <T extends Record<string, unknown>>({
                         {columns.map((column, colIndex) => (
                           <TableCell
                             key={`skeleton-cell-${colIndex}`}
-                            className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-foreground sm:pl-6 text-center"
+                            className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6 text-center"
                           >
                             <Skeleton className="h-4 w-[80%] mx-auto" />
                           </TableCell>
                         ))}
                         {actions.length > 0 && (
-                          <TableCell className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-foreground sm:pl-6">
+                          <TableCell className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6">
                             <div className="flex gap-2">
                               <Skeleton className="h-8 w-8 rounded-md" />
                               <Skeleton className="h-8 w-8 rounded-md" />
@@ -430,7 +430,7 @@ const GridDataView = <T extends Record<string, unknown>>({
                         {columns.map((column) => (
                           <TableCell
                             key={column.field as string}
-                            className="py-4 pl-4 pr-3 text-sm text-foreground sm:pl-6 text-center"
+                            className="py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6 text-center"
                           >
                             {renderCell(column, item)}
                           </TableCell>

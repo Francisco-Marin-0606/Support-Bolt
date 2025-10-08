@@ -1062,12 +1062,12 @@ function UsersContent() {
               <div className="flex justify-start mb-4">
                 <button
                   onClick={() => setShowCreateForm(false)}
-                  className="text-foreground"
+                  className="text-black"
                 >
                   <svg
-                    className="w-6 h-6 bg-foreground rounded-full"
+                    className="w-6 h-6 bg-black rounded-full"
                     fill="none"
-                    stroke="currentColor"
+                    stroke="white"
                     viewBox="0 0 24 24"
                   >
                     <path
@@ -1080,19 +1080,19 @@ function UsersContent() {
                 </button>
               </div>
               <div className="px-8 py-4">
-                <h2 className="text-[30px] font-extrabold text-center mb-8 text-foreground">
+                <h2 className="text-[30px] font-extrabold text-center mb-8">
                   Crear usuario nuevo
                 </h2>
 
                 {createError && (
-                  <p className="text-red-400 text-center mb-4">{createError}</p>
+                  <p className="text-red-500 text-center mb-4">{createError}</p>
                 )}
 
                 <div className="flex justify-center">
                   <button
                     onClick={handleCreateUser}
                     disabled={isCreatingUser}
-                    className={`w-[300px] bg-primary text-primary-foreground py-4 rounded-xl font-bold hover:opacity-90 transition ${
+                    className={`w-[300px] bg-black text-white py-4 rounded-xl font-bold hover:bg-gray-900 transition ${
                       isCreatingUser ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                   >
@@ -1108,31 +1108,31 @@ function UsersContent() {
         <div className="space-y-4">
           {/* Información general */}
           <div className="flex justify-between items-center">
-            <div className="text-sm text-gray-400">
+            <div className="text-sm text-gray-600">
               <span className="font-medium">Total de activos históricos:</span>{" "}
-              <span className="text-purple-400 font-semibold">
-                {statsLoading
-                  ? "..."
+              <span className="text-purple-600 font-semibold">
+                {statsLoading 
+                  ? "..." 
                   : (stats?.totalActives || 0).toLocaleString("es-ES")
                 }
               </span>
             </div>
           </div>
-
+          
           {/* Tarjetas de filtros */}
           <div className="grid grid-cols-3 gap-4">
             <div
               onClick={showAllUsers}
-              className={`bg-card rounded-lg p-6 border border-border cursor-pointer transition-all duration-200 ${
+              className={`bg-white rounded-lg p-6 shadow-strong cursor-pointer transition-all duration-200 ${
                 memberStatus === "all"
-                  ? "ring-2 ring-blue-500 bg-blue-950/30"
-                  : "hover:bg-accent"
-              } ${isAllButtonPressed ? "transform scale-95" : ""}`}
+                  ? "ring-2 ring-blue-500"
+                  : "hover:shadow-xl"
+              } ${isAllButtonPressed ? "transform scale-95 bg-blue-50" : ""}`}
             >
-              <div className="text-muted-foreground text-lg font-medium">Todos</div>
-              <div className="text-foreground text-[40px] font-display font-normal">
-                {statsLoading
-                  ? "..."
+              <div className="text-gray-500 text-lg font-medium">Todos</div>
+              <div className="text-black text-[40px] font-display font-normal">
+                {statsLoading 
+                  ? "..." 
                   : (stats?.total || 0).toLocaleString("es-ES")
                 }
               </div>
@@ -1140,22 +1140,22 @@ function UsersContent() {
 
             <div
               onClick={showActiveUsers}
-              className={`bg-card rounded-lg p-6 border border-border cursor-pointer transition-all duration-200 ${
+              className={`bg-white rounded-lg p-6 shadow-strong cursor-pointer transition-all duration-200 ${
                 memberStatus === "active"
-                  ? "ring-2 ring-green-500 bg-green-950/30"
-                  : "hover:bg-accent"
-              } ${isActiveButtonPressed ? "transform scale-95" : ""}`}
+                  ? "ring-2 ring-green-500"
+                  : "hover:shadow-xl"
+              } ${isActiveButtonPressed ? "transform scale-95 bg-green-50" : ""}`}
             >
-              <div className="text-muted-foreground text-lg font-medium">Activos</div>
+              <div className="text-gray-500 text-lg font-medium">Activos</div>
               <div className={`text-[40px] font-display font-normal ${
-                memberStatus === "active"
-                  ? "text-green-400"
-                  : memberStatus !== "all"
-                    ? "text-foreground"
-                    : "text-green-400"
+                memberStatus === "active" 
+                  ? "text-[#188554]" 
+                  : memberStatus !== "all" 
+                    ? "text-black" 
+                    : "text-[#188554]"
               }`}>
-                {statsLoading
-                  ? "..."
+                {statsLoading 
+                  ? "..." 
                   : (stats?.active || 0).toLocaleString("es-ES")
                 }
               </div>
@@ -1163,22 +1163,22 @@ function UsersContent() {
 
             <div
               onClick={showTrialUsers}
-              className={`bg-card rounded-lg p-6 border border-border cursor-pointer transition-all duration-200 ${
+              className={`bg-white rounded-lg p-6 shadow-strong cursor-pointer transition-all duration-200 ${
                 memberStatus === "trial"
-                  ? "ring-2 ring-orange-500 bg-orange-950/30"
-                  : "hover:bg-accent"
-              } ${isTrialButtonPressed ? "transform scale-95" : ""}`}
+                  ? "ring-2 ring-orange-500"
+                  : "hover:shadow-xl"
+              } ${isTrialButtonPressed ? "transform scale-95 bg-orange-50" : ""}`}
             >
-              <div className="text-muted-foreground text-lg font-medium">Trial</div>
+              <div className="text-gray-500 text-lg font-medium">Trial</div>
               <div className={`text-[40px] font-display font-normal ${
-                memberStatus === "trial"
-                  ? "text-orange-400"
-                  : memberStatus !== "all"
-                    ? "text-foreground"
-                    : "text-orange-400"
+                memberStatus === "trial" 
+                  ? "text-orange-600" 
+                  : memberStatus !== "all" 
+                    ? "text-black" 
+                    : "text-orange-600"
               }`}>
-                {statsLoading
-                  ? "..."
+                {statsLoading 
+                  ? "..." 
                   : (stats?.trial || 0).toLocaleString("es-ES")
                 }
               </div>
@@ -1283,21 +1283,20 @@ function UsersContent() {
       </div>
       {showCancelModal && (
         <Modal onClose={() => setShowCancelModal(false)}>
-          <div className="w-[500px] bg-card border border-border rounded-lg p-6">
-            <h2 className="text-xl font-bold mb-4 text-foreground">Cancelar Suscripción</h2>
-            <p className="text-muted-foreground">
+          <div className="w-[500px] bg-white rounded-lg p-6">
+            <h2 className="text-xl font-bold mb-4">Cancelar Suscripción</h2>
+            <p>
               ¿Estás seguro de que quieres cancelar la suscripción de{" "}
               {suscriptionIsReveue ? "de RevenueCat" : "Stripe"} de{" "}
               {selectedUserRow?.email}?
             </p>
 
             {!suscriptionIsReveue && (
-              <label className="flex items-center gap-2 text-sm mt-2 mb-2 font-medium text-foreground">
+              <label className="flex items-center gap-2 text-sm mt-2 mb-2 font-medium ">
                 <input
                   type="checkbox"
                   checked={false}
                   onChange={(e) => {/* handle checkbox */}}
-                  className="rounded border-border"
                 />
                 Cancelar al final del periodo
               </label>
@@ -1305,7 +1304,7 @@ function UsersContent() {
             <div className="flex justify-end gap-3 mt-6">
               <button
                 onClick={() => setShowCancelModal(false)}
-                className="px-4 py-2 bg-secondary text-secondary-foreground rounded hover:opacity-90"
+                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
               >
                 Cancelar
               </button>

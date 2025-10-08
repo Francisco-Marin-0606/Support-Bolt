@@ -33,13 +33,10 @@ export default function LoginPage() {
 
   useEffect(() => {
     const checkToken = async () => {
-      try {
-        const token = await getAuthToken();
-        if (token) {
-          router.push('/users');
-        }
-      } catch (error) {
-        // Silently fail if no token exists - user is on login page anyway
+      const token = await getAuthToken();
+      if (token) {
+        // Si el token es válido, redirige a la ruta /users
+        router.push('/users');
       }
     };
 
@@ -84,17 +81,33 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
 
-    // Bypass login - go directly to users page
-    router.push('/users');
+    setLoading(true);
+
+    try {
+      await login(credentials);
+      router.push('/users');
+    } catch (err) {
+      console.error('Error durante el login:', err);
+      setErrors(prev => ({
+        ...prev,
+        submit: err instanceof Error ? err.message : 'Error en el inicio de sesión'
+      }));
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="max-w-md w-full space-y-8 p-8 bg-card border border-border rounded-lg shadow-lg">
+    <div className="min-h-screen flex items-center justify-center bg-background-secondary">
+      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-sm">
         <div>
-          <h2 className={`${textStyles.h2} text-center text-foreground`}>Mental Support</h2>
-          <p className={`${textStyles.body} text-center text-muted-foreground mt-2`}>
+          <h2 className={`${textStyles.h2} text-center`}>Mental Support</h2>
+          <p className={`${textStyles.body} text-center text-text-secondary mt-2`}>
           Todo falla... menos nosotros.
           </p>
         </div>
@@ -102,7 +115,7 @@ export default function LoginPage() {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-muted-foreground">
+              <label htmlFor="email" className="block text-sm font-medium text-text-secondary">
                 Email
               </label>
               <input
@@ -113,16 +126,16 @@ export default function LoginPage() {
                 required
                 value={credentials.email}
                 onChange={handleChange}
-                className={`${inputStyles.base} ${inputStyles.sizes.md} mt-1`}
+                className={`${inputStyles.base} ${inputStyles.sizes.md} mt-1 text-black`}
                 placeholder="tu@email.com"
               />
               {errors.email && (
-                <p className="mt-1 text-sm text-red-400">{errors.email}</p>
+                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
               )}
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-muted-foreground">
+              <label htmlFor="password" className="block text-sm font-medium text-text-secondary">
                 Contraseña
               </label>
               <input
@@ -133,17 +146,17 @@ export default function LoginPage() {
                 required
                 value={credentials.password}
                 onChange={handleChange}
-                className={`${inputStyles.base} ${inputStyles.sizes.md} mt-1`}
+                className={`${inputStyles.base} ${inputStyles.sizes.md} mt-1 text-black`}
                 placeholder="••••••••"
               />
               {errors.password && (
-                <p className="mt-1 text-sm text-red-400">{errors.password}</p>
+                <p className="mt-1 text-sm text-red-600">{errors.password}</p>
               )}
             </div>
           </div>
 
           {errors.submit && (
-            <div className="text-red-400 text-sm text-center">
+            <div className="text-red-600 text-sm text-center">
               {errors.submit}
             </div>
           )}
@@ -151,7 +164,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className={`${buttonStyles.base} ${buttonStyles.sizes.md} w-full bg-primary text-primary-foreground hover:opacity-90`}
+            className={`${buttonStyles.base} ${buttonStyles.sizes.md} w-full bg-black text-white`}
           >
             {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
           </button>

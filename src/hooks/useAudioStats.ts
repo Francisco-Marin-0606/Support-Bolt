@@ -10,11 +10,11 @@ export const useAudioStats = () => {
       const response = await getAudioRequestStats();
       return response;
     },
-    staleTime: Infinity,
-    gcTime: Infinity,
+    staleTime: Infinity, // Nunca considerar la data como stale automáticamente
+    gcTime: Infinity, // Nunca eliminar del cache automáticamente
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    refetchOnMount: false,
+    refetchOnMount: false, // Solo refetch manual
     retry: 2,
   });
 }; 
