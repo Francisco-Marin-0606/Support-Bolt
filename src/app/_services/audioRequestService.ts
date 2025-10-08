@@ -332,14 +332,18 @@ export async function acceleratePublication(
 
 export async function getAudioRequestStats(): Promise<AudioRequestStats> {
   try {
+    console.log('Llamando a endpoint:', `${MMG_API}/totals`);
     const response = await connection.get<AudioRequestStats>(`${MMG_API}/totals`);
+    console.log('Respuesta recibida:', {
+      ok: response.ok,
+      status: response.status,
+      data: response.data
+    });
+
     if (!response.ok) {
-      console.error('Error response:', {
-        status: response.status,
-        data: response.data
-      });
+      console.error('Error response completa:', response);
       throw new Error(
-        `Error al obtener las estadísticas de las solicitudes de audio: ${response.status}`
+        `Error al obtener las estadísticas: Status ${response.status}. Data: ${JSON.stringify(response.data)}`
       );
     }
     return response.data;
