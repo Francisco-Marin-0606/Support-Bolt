@@ -221,11 +221,26 @@ export async function updateMmgUserStatus(
 }
 
 export async function getMmgUserStats(): Promise<MmgUserStats> {
-  const response = await connection.get<MmgUserStats>(`${MMG_API}/totals`);
-  if (!response.ok) {
-    throw new Error("Error al obtener las estadísticas de los usuarios MMG");
+  try {
+    console.log('Llamando a endpoint:', `${MMG_API}/totals`);
+    const response = await connection.get<MmgUserStats>(`${MMG_API}/totals`);
+    console.log('Respuesta getMmgUserStats:', {
+      ok: response.ok,
+      status: response.status,
+      data: response.data
+    });
+
+    if (!response.ok) {
+      console.error('Error response completa:', response);
+      throw new Error(
+        `Error al obtener las estadísticas de los usuarios MMG: Status ${response.status}. Data: ${JSON.stringify(response.data)}`
+      );
+    }
+    return response.data as MmgUserStats;
+  } catch (error) {
+    console.error('Error en getMmgUserStats:', error);
+    throw error;
   }
-  return response.data as MmgUserStats;
 }
 
 // Obtener usuarios activos usando findAll y filtrando por membresía activa
