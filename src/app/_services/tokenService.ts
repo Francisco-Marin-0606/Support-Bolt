@@ -35,22 +35,12 @@ export const saveTokens = (accessToken: string, refreshToken: string) => {
   }
 };
 
-// Function to get tokens
+// Function to get tokens - BYPASSED FOR DEVELOPMENT
 export const getTokens = () => {
-  const accessToken = localStorage.getItem('access_token');
-  const refreshToken = localStorage.getItem('refresh_token');
-  const expiresAtStr = localStorage.getItem('token_expires_at');
-  
-  let isExpired = false;
-  if (expiresAtStr) {
-    const expiresAt = new Date(expiresAtStr);
-    isExpired = new Date() > expiresAt;
-  }
-  
   return {
-    accessToken,
-    refreshToken,
-    isExpired
+    accessToken: 'bypass-token',
+    refreshToken: 'bypass-refresh-token',
+    isExpired: false
   };
 };
 
@@ -162,96 +152,22 @@ let refreshTokenPromise: Promise<string> | null = null;
 let pendingRequests: Array<() => void> = [];
 
 export async function fetchWithTokenRefresh(url: string, options: RequestInit = {}): Promise<Response> {
-  let retryCount = 0;
-  const MAX_RETRIES = 2; 
+  // Bypass authentication - make requests without token validation
+  const { accessToken } = getTokens();
 
-  async function attemptFetch(): Promise<Response> {
-    try {
-      const { accessToken, isExpired } = getTokens();
-      
-      if (!accessToken) {
-        window.location.href = '/login'; 
-        throw new Error('No hay token de acceso disponible');
-      }
-
-      let tokenToUse = accessToken;
-      if (isExpired) {
-        try {
-          tokenToUse = await getValidToken();
-        } catch (refreshError) {
-          console.error('Error pre-refreshing expired token:', refreshError);
-        }
-      }
-
-      // Intento con el token actual o refrescado
-      const response = await fetch(url, {
-        ...options,
-        headers: {
-          ...options.headers,
-          'Authorization': `Bearer ${tokenToUse}`,
-        },
-      });
-
-      // Si la respuesta es 401 y no hemos excedido los intentos, intentamos refrescar el token
-      if (response.status === 401 && retryCount < MAX_RETRIES) {
-        retryCount++;
-        try {
-          const newAccessToken = await getValidToken();
-          
-          // Reintentamos la petición con el nuevo token
-          return fetch(url, {
-            ...options,
-            headers: {
-              ...options.headers,
-              'Authorization': `Bearer ${newAccessToken}`,
-            },
-          });
-        } catch (refreshError) {
-          console.error('Error refreshing token during fetch:', refreshError);
-          // Si falla el refresh, devolvemos la respuesta 401 original
-          return response;
-        }
-      }
-
-      return response;
-    } catch (error) {
-      console.error('Error in fetchWithTokenRefresh:', error);
-      throw error;
-    }
-  }
-
-  return attemptFetch();
+  return fetch(url, {
+    ...options,
+    headers: {
+      ...options.headers,
+      'Authorization': `Bearer ${accessToken}`,
+    },
+  });
 }
 
 export async function getValidToken(): Promise<string> {
-  if (refreshTokenPromise) {
-    return refreshTokenPromise;
-  }
-
-  const { accessToken, refreshToken, isExpired } = getTokens();
-  
-  if (accessToken && !isExpired) {
-    return accessToken;
-  }
-
-  if (!refreshToken) {
-    throw new Error('No hay refresh token disponible');
-  }
-
-  refreshTokenPromise = new Promise(async (resolve, reject) => {
-    try {
-      const newToken = await refreshAccessToken();
-      resolve(newToken);
-      pendingRequests.forEach(callback => callback());
-    } catch (error) {
-      reject(error);
-    } finally {
-      refreshTokenPromise = null;
-      pendingRequests = [];
-    }
-  });
-
-  return refreshTokenPromise;
+  // Bypass - always return a fake token
+  const { accessToken } = getTokens();
+  return accessToken;
 }
 
 export function clearTokens(): void {
